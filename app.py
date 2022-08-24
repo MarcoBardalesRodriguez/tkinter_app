@@ -1,6 +1,9 @@
 from tkinter import *
+from tkinter.filedialog import *
+
 import json
-from turtle import position
+import pyautogui
+
 
 # class Application(Frame):
 #     def __init__(self, master=None):
@@ -42,7 +45,6 @@ def limpiar_pantalla():
 
 
 def obtener_datos():
-    # global datos
     datos = {}
 
     datos['cliente_dni'] = txt_dni.get()
@@ -117,86 +119,16 @@ def almacenar_datos():
     f.write(format_data)
     f.close()
 
-def imprimir_datos():
 
-    def cerrar_subventana():
-        ventana_emergente.destroy()
+def tomar_captura():
+    ancho = 960
+    alto= 550
+    x= root.winfo_screenwidth()  //  2 - ancho_ventana  // 2
+    y= root.winfo_screenheight()  //  2 - alto_ventana  // 2
 
-    datos=obtener_datos()
-
-    # Creacion de una sub ventana
-
-    ventana_emergente = Toplevel()
-    ventana_emergente.title("Informacion")
-    ventana_emergente.geometry("300x500")
-    # ventana_emergente.resizable(False, False)
-    title = Label(ventana_emergente, text="Detalles de Venta")
-    title.pack(side=TOP, pady=10)
-
-    resumen_venta="""
-    Boleta de Venta
-    
-    Apellido:   {}
-    Nombre:   {}
-    DNI:          {}
-    Direccion: {}
-    Telefono:   {}
-    
-    Cod_prod           Descripcion         Unidad          Cantidad            Precio       Subtotal 
-    {}         {}            {}           {}            {}           {} 
-    {}         {}            {}           {}            {}           {} 
-    {}         {}            {}           {}            {}           {} 
-    
-    Total    {}""".format(
-        datos['cliente_apellido'] ,
-        datos['cliente_nombre'] ,
-        datos['cliente_dni'] ,
-        datos['cliente_direccion'] ,
-        datos['cliente_telefono'] ,
-
-        datos['producto_cod_1'],
-        datos['producto_cod_2'],
-        datos['producto_cod_3'] ,
-
-        datos['producto_desc_2'] ,
-        datos['producto_desc_2'] ,
-        datos['producto_desc_3'] ,
-
-        datos['producto_unit_1'] ,
-        datos['producto_unit_2'] ,
-        datos['producto_unit_3'] ,
-
-        datos['producto_cant_1'],
-        datos['producto_cant_2'] ,
-        datos['producto_cant_3'] ,
-
-        datos['producto_precio_1'] ,
-        datos['producto_precio_2'] ,
-        datos['producto_precio_3'] ,
-
-        datos['producto_subtotal_1'] ,
-        datos['producto_subtotal_2'] ,
-        datos['producto_subtotal_3'] ,
-
-        datos['producto_total'] 
-    )
-
-    resumen = StringVar()
-    resumen.set(resumen_venta)
-
-    txt_resumen= Label(ventana_emergente, textvariable=resumen)
-    txt_resumen.pack(expand=True)
-    
-    btn_salir= Button(ventana_emergente,text="OK", width=15, bg="#55cc55", fg="#ffffff")
-    btn_salir.config(command=cerrar_subventana)
-    btn_salir.pack(side=BOTTOM, pady=10)
-
-    # f = open("data.json", "r")
-    # content = f.read()
-    # f.close()
-
-    # print(content)
-    # print(resumen_venta)
+    mi_captura = pyautogui.screenshot('imagen.png', region=(x,y,ancho,alto))
+    save_path = asksaveasfilename()
+    mi_captura.save(save_path+"_screenshot.png")
 
 
 def cerrar_ventana():
@@ -215,8 +147,8 @@ alto_ventana = 550
 x_ventana = root.winfo_screenwidth()  //  2 - ancho_ventana  // 2
 y_ventana = root.winfo_screenheight()  //  2 - alto_ventana  // 2
 posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+
 root.geometry(posicion)
-# root.geometry("920x550")
 root.resizable(False, False)
 
 
@@ -367,7 +299,7 @@ btn_calcular.config(command=almacenar_datos)
 btn_salir = Button(root, text="Salir", bg="#ff5555", fg="#ffffff", width=15)
 btn_salir.config(command=cerrar_ventana)
 btn_imprimir = Button(root, text="Imprimir", bg="#55cc55", fg="#ffffff", width=15)
-btn_imprimir.config(command=imprimir_datos)
+btn_imprimir.config(command=tomar_captura)
 
 
 btn_limpiar.grid(row=10, column=1, padx=10, pady=20)
