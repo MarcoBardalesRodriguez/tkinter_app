@@ -1,3 +1,4 @@
+from glob import glob
 from tkinter import *
 from tkinter.filedialog import *
 import pyautogui as ag
@@ -122,7 +123,7 @@ def tomar_captura():
     
     time.sleep(1)
 
-    captura = ag.screenshot('temp.png', region=obtener_posicion())
+    captura = ag.screenshot('imagen.png', region=obtener_posicion())
     ruta = asksaveasfilename()
     captura.save(ruta+"_sistema_ventas.png")
 
